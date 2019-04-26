@@ -5,14 +5,15 @@ making_proteins.py
 """
 
 import os
+import copy
+import random
 import parmed
+from parmed.modeller import ResidueTemplate
 from simtk.openmm import app
 from simtk import unit
 from oeommtools import utils as oeo_utils
 from chemper.smirksify import SMIRKSifier
 from chemper.graphs.cluster_graph import ClusterGraph
-import copy
-import random
 from openeye import oechem
 
 
@@ -79,12 +80,20 @@ class ParameterSystem:
         top = oeo_utils.oemol_to_openmmTop(m)[0]
         ff = app.ForceField(self.openmm_xml)
         protein_sys = ff.createSystem(top)
-        parm = parmed.openmm.load_topology(top, protein_sys)
 
         oechem.OEAssignFormalCharges(m)
         oechem.OEClearAromaticFlags(m)
         oechem.OEAssignAromaticFlags(m, oechem.OEAroModel_MDL)
         oechem.OEAssignHybridization(m)
+
+        # save residue names in parm system
+        parm = parmed.openmm.load_topology(top, protein_sys)
+        for res in parm.residues:
+            rt = ResidueTemplate.from_residue(res)
+            if rt.tail is None and rt.head is not None:
+                res.name = 'C_'+res.name
+            elif rt.head is None and rt.tail is not None:
+                res.name = 'N_'+res.name
 
         self.mol_dict[mol_id] = {
             'parmed': parm,
@@ -114,12 +123,19 @@ class ParameterSystem:
         Returns
         -------
         clusters: dictionary with the form
-                  {string parameter: {'atom_idices': {}}
+                  {string parameter: {'atom_indices': {}}
         """
         # TODO raise error if mol_id not in mol_dict
         for a in sys.atoms:
+            # find terminal label:
+            term_label = 'X'
+            if 'N_' in a.residue.name:
+                term_label = 'N'
+            elif 'C_' in a.residue.name:
+                term_label = 'C'
+
             # Update charge dictionary:
-            charge_str = "%.5f" % a.charge
+            charge_str = "%.5f\t%s" % (a.charge, term_label)
             charge_param = [a.ucharge]
             self.charge_dict.add_param(charge_str, charge_param)
             self.charge_dict.add_atoms(charge_str, mol_id, [a.idx])
@@ -222,40 +238,59 @@ class ParameterSystem:
             self.proper_dict.add_atoms(prop_str, mol_id, atoms)
 
 
+def reverse_clusters(clusters):
+    return list(reversed(clusters))
+
+
+def shuffle(clusters):
+    temp_c = copy.deepcopy(clusters)
+    random.shuffle(temp_c)
+    return temp_c
+
+
+def by_smallest_size(clusters):
+    return sorted(clusters, key=lambda x: len([a for l in x[1] for a in l]))
+
+
+def by_smallest_num_molecule(clusters):
+    temp_c = sorted(clusters, key=lambda x: len([1 for l in x[1] if len(l) > 0]))
+    return temp_c
+
+
+def by_biggest_size(clusters):
+    return reverse_clusters(by_smallest_size(clusters))
+
+
+def by_biggest_num_molecule(clusters):
+    return reverse_clusters(by_smallest_num_molecule(clusters))
+
+
+def by_smallest_smirks(clusters, mols):
+    temp_c = sorted(clusters, key=lambda x: len(ClusterGraph(mols, x[1]).as_smirks()))
+    return temp_c
+
+
+def by_biggest_smirks(clusters, mols):
+    return reverse_clusters(by_smallest_smirks(clusters, mols))
+
+
+def by_terminii(clusters, mols, sort_funct=by_biggest_size):
+    x = [t for t in clusters if 'X' in t[0]]
+    n = [t for t in clusters if 'N' in t[0]]
+    c = [t for t in clusters if 'C' in t[0]]
+    if sort_funct is None:
+        return x + n + c
+    if 'smirks' in sort_funct.__str__():
+        return sort_funct(x, mols) + sort_funct(n, mols) + sort_funct(c, mols)
+
+    return sort_funct(x) + sort_funct(n) + sort_funct(c)
+
+
 def change_order_smirksified(mols, cluster_types, order_type_names=None, smirks_verbose=False,
                              include_params=None):
     """
     Returns smirs_order_types object
     """
-
-    def reverse_clusters(clusters):
-        return list(reversed(clusters))
-
-    def shuffle(clusters):
-        temp_c = copy.deepcopy(clusters)
-        random.shuffle(temp_c)
-        return temp_c
-
-    def by_smallest_size(clusters):
-        return sorted(clusters, key=lambda x: len([a for l in x[1] for a in l]))
-
-    def by_smallest_num_molecule(clusters):
-        temp_c = sorted(clusters, key=lambda x: len([1 for l in x[1] if len(l) > 0]))
-        return temp_c
-
-    def by_biggest_size(clusters):
-        return reverse_clusters(by_smallest_size(clusters))
-
-    def by_biggest_num_molecule(clusters):
-        return reverse_clusters(by_smallest_num_molecule(clusters))
-
-    def by_smallest_smirks(clusters):
-        temp_c = sorted(clusters, key=lambda x: len(ClusterGraph(mols, x[1]).as_smirks()))
-        return temp_c
-
-    def by_biggest_smirks(clusters):
-        return reverse_clusters(by_smallest_smirks(clusters))
-
     smirs_order_types = dict()
 
     order_types_dict = {
@@ -291,10 +326,15 @@ def change_order_smirksified(mols, cluster_types, order_type_names=None, smirks_
             if label not in include_params:
                 continue
 
-            if o_funct is None:
+            if 'charge' in label.lower():
+                o_clusters = by_terminii(clusters, mols, o_funct)
+            elif o_funct is None:
                 o_clusters = clusters
             else:
-                o_clusters = o_funct(clusters)
+                if 'smirks' in o_type:
+                    o_clusters = o_funct(clusters, mols)
+                else:
+                    o_clusters = o_funct(clusters)
 
             smirs_order_types[o_type][label] = SMIRKSifier(mols, o_clusters,
                                                            max_layers=10,
@@ -389,4 +429,105 @@ def everything_from_fastas(list_fastas,
     if verbose: print_order_type_data(smirs_order_types)
 
     return store_data, smirs_order_types, mols, cluster_types
+
+
+def clusters_to_files(mols, clusters, smirs_order_types, json_file_name, mol_dir='./mol_files/'):
+    directory = os.path.abspath(mol_dir)
+
+    mfile_names = list()
+    for midx, mol in enumerate(mols):
+        file_name = mol.GetTitle() + '.oeb'
+        mfile_names.append(file_name)
+
+        for param, par_clusters in clusters.items():
+            for label, cluster in par_clusters:
+                key = param + '_' + label
+                if len(cluster[midx]) == 0:
+                    entry = 'None'
+                else:
+                    entry = tuple(['-'.join([str(i) for i in a]) for a in cluster[midx]])
+                mol.SetData(key, entry)
+
+        ofs_name = os.path.join(directory, file_name)
+        ofs = oechem.oemolostream(ofs_name)
+        oechem.OEWriteMolecule(ofs, mol)
+        ofs.close()
+
+    order_data = dict()
+    for types, smirksifier_dict in smirs_order_types.items():
+        order_data[types] = dict()
+        for param_type, smirksifier in smirksifier_dict.items():
+            order_data[types][param_type] = {
+                'checked': smirksifier.checks,
+                'type_list': smirksifier.current_smirks
+            }
+
+    to_j = {
+        'mol_files': mfile_names,
+        'smiles': [mol_to_idx_smi(m) for m in mols],
+        'clusters': clusters,
+        'smirks_lists': order_data
+    }
+
+    with open(json_file_name, 'w') as output:
+        json.dump(to_j, output)
+
+
+def mol_to_idx_smi(m):
+    for a in m.GetAtoms():
+        a.SetMapIdx(a.GetIdx() + 1)
+    return oechem.OEMolToSmiles(m)
+
+
+if __name__ == '__main__':
+    import glob
+    import itertools
+    import json
+    from optparse import OptionParser
+
+    parser = OptionParser()
+
+    parser.add_option('-f', '--fastas',
+                      action='store', type='string', dest='fastas',
+                      default='*triple*.fasta',
+                      help="This is a search for fasta files in the provided directory")
+
+    parser.add_option('-d', '--directory',
+                      action='store', type='string', dest='directory',
+                      help="""This is a relative or absolute path the directory with the fasta
+                      files and where output json should be stored""")
+
+    parser.add_option('-x', '--xmls',
+                      action='store', type='string', dest='xmls',
+                      default='99sbildn',
+                      help="Which force fields to test, current options are 14all or 99sbildn or all")
+
+    (opt,args) = parser.parse_args()
+
+    names = ['original', 'biggest_size', 'most_mols', 'big_smirks']
+    # Find which protein forcefields we are considering
+    xml_dict = {'99sbildn':'amber99sbildn.xml', '14all':'amber14-all.xml'}
+    if opt.xmls not in xml_dict.keys() and opt.xmls.lower() != 'all':
+        parser.print_help()
+        parser.error("xml must be in [99sbildn, 14all, all]")
+
+    if opt.xmls.lower() == 'both':
+        xml_keys = xml_dict.keys()
+    else:
+        xml_keys = [opt.xmls]
+
+    xmls = [(k, xml_dict[k]) for k in xml_keys]
+
+    directory = os.path.abspath(opt.directory)
+    fastas = glob.glob(os.path.join(directory, opt.fastas))
+
+    all_params = ['proper_torsion', 'bond', 'lj', 'charge']
+
+    for xml_label, protein_xml in xmls:
+        all_params = ['proper_torsion', 'bond', 'lj', 'charge']
+        _, smirks_order_types, mols, clusters = everything_from_fastas(fastas, verbose=False,
+                                                                       order_type_names=names,
+                                                                       protein_xml=protein_xml)
+        json_file = '%s/%s_all_%imols.json' % (directory, xml_label, len(fastas))
+        clusters_to_files(mols, clusters, smirks_order_types, json_file)
 

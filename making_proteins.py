@@ -326,6 +326,7 @@ def change_order_smirksified(mols, cluster_types, order_type_names=None, smirks_
             if label not in include_params:
                 continue
 
+            print(label)
             if 'charge' in label.lower():
                 o_clusters = by_terminii(clusters, mols, o_funct)
             elif o_funct is None:
@@ -494,6 +495,7 @@ if __name__ == '__main__':
 
     parser.add_option('-d', '--directory',
                       action='store', type='string', dest='directory',
+                      default='./mol_files/',
                       help="""This is a relative or absolute path the directory with the fasta
                       files and where output json should be stored""")
 
@@ -502,9 +504,13 @@ if __name__ == '__main__':
                       default='99sbildn',
                       help="Which force fields to test, current options are 14all or 99sbildn or all")
 
+    parser.add_option('-n', '--sim_name',
+                      action='store', type='string', dest='sim_name',
+                      default='',
+                      help="a custom label for this run")
+
     (opt,args) = parser.parse_args()
 
-    names = ['original', 'biggest_size', 'most_mols', 'big_smirks']
     # Find which protein forcefields we are considering
     xml_dict = {'99sbildn':'amber99sbildn.xml', '14all':'amber14-all.xml'}
     if opt.xmls not in xml_dict.keys() and opt.xmls.lower() != 'all':
@@ -517,17 +523,42 @@ if __name__ == '__main__':
         xml_keys = [opt.xmls]
 
     xmls = [(k, xml_dict[k]) for k in xml_keys]
+    simulation_name = opt.sim_name
 
     directory = os.path.abspath(opt.directory)
     fastas = glob.glob(os.path.join(directory, opt.fastas))
+    fastas = [f for f in fastas if '.fasta' in f]
 
-    all_params = ['proper_torsion', 'bond', 'lj', 'charge']
+    #all_params = ['proper_torsion', 'bond', 'lj', 'charge']
+# 'original': None,
+# 'reversed': reverse_clusters,
+# 'shuffle': shuffle,
+# 'small_size': by_smallest_size,
+# 'biggest_size': by_biggest_size,
+# 'fewest_mols': by_smallest_num_molecule,
+# 'most_mols': by_biggest_num_molecule,
+# 'small_smirks': by_smallest_smirks,
+# 'big_smirks': by_biggest_smirks}
 
-    for xml_label, protein_xml in xmls:
-        all_params = ['proper_torsion', 'bond', 'lj', 'charge']
-        _, smirks_order_types, mols, clusters = everything_from_fastas(fastas, verbose=False,
-                                                                       order_type_names=names,
-                                                                       protein_xml=protein_xml)
-        json_file = '%s/%s_all_%imols.json' % (directory, xml_label, len(fastas))
-        clusters_to_files(mols, clusters, smirks_order_types, json_file)
+    all_params = ['charge', 'angle', 'improper_torsion', 'proper_torsion', 'lj', 'bond']
+    names_sets = [('big', ['biggest_size', 'most_mols', 'big_smirks'] ),
+            ( 'small', ['small_size', 'fewest_mols', 'small_smirks'] ),
+            ('shuffle', ['original', 'shuffle', 'shuffle'])]
+
+    for name_lab, names in names_sets:
+        print(name_lab)
+        for xml_label, protein_xml in xmls:
+            print(xml_label)
+            for param in all_params:
+                print(param)
+                _, smirks_order_types, mols, clusters = everything_from_fastas(fastas, verbose=False,
+                                                                               order_type_names=names,
+                                                                               protein_xml=protein_xml,
+                                                                               include_params=[param])
+                if at_least_one_passed(smirks_order_types):
+                    print('Something PASSED --  ', param)
+                else:
+                    print('ALL FAILED --  ', param)
+                json_file = '%s/%s_%s_%s_%s_%imols.json' % (directory, simulation_name, name_lab, xml_label, param, len(fastas))
+                clusters_to_files(mols, clusters, smirks_order_types, json_file)
 

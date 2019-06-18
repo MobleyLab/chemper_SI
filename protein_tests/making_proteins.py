@@ -1,7 +1,39 @@
 """
 making_proteins.py
 
+It turns out that getting a protein that is parameterized by the
+desired force field where you also have a complete molecular
+description (bond order, etc) was harder than it sounded.
 
+This script is a bit convoluted and given more time at the end
+of Caitlin's PhD she would have cleaned it up, but instead
+there are notes to try to explain what it does.
+
+The ultimate goal is this:
+1. start with a fasta file of the amino acid chain you want
+   these were chosen as the file format because it is easy to get
+   an arbitrary order of amino acids so we could potentially make
+   any combination of small polypeptides for testing this process.
+   It should be simple to switch this to a PDB instead
+
+2. Use oeommtools to convert an OEMol to an OpenMM system which
+   can be parameterized with any OpenMM XML force field
+
+3. For each fragment type, make clusters of atoms based on the
+   parameter that is assigned.
+   For example, bond are grouped by there exact force constant
+   and equilibrium force constant.
+   Note - this is done by converting parameters to strings which
+   can be used in keys of a dictionary to store atoms in that cluster.
+   No, that isn't the best or most elegant way to do this, but it worked
+   in the short time frame for wrapping up the project.
+
+4. Convert dictionaries of {parameter: atoms} to clusters for ChemPer
+   We order these clusters in a few different was as described in the
+   manuscript.
+
+5. Use ChemPer to try to make SMIRKS for each fragment type and
+   and ordering technique
 """
 
 import os
@@ -18,7 +50,20 @@ from openeye import oechem
 
 
 class ParameterDict:
+    """
+    This class makes it easier to store a custom organized dictionary
+    for any parameter type.
+    In 'd' the key is always going to be a string of the parameter
+    then we store the following information:
 
+    atom_indices: this is dictionary in the form {mol_id: [ (atoms), ]}
+    parameters: since we're using strings of the parameter as a key
+                this is a set of all parameters that were actually used
+                the goal was to use this to check that there was REALLY
+                only 1 parameter added to each item, however we never
+                actually used it for anything.
+    units: units for the input parameters.
+    """
     def __init__(self):
         self.d = dict()
 
@@ -43,8 +88,15 @@ class ParameterDict:
 
 
 class ParameterSystem:
+    """
+    Like ParameterDict, this class was created
+    to try to help with bookkeeping when converting
+    a molecule from an oemol to a parameterized openmm system.
+    It has functions to add molecules into the system and add
+    there atoms to ParameterDicts for each fragment type.
+    """
 
-    def __init__(self, openmm_xml='amber14-all.xml'):
+    def __init__(self, openmm_xml='amber99sbildn.xml'):
         self.openmm_xml = openmm_xml
         self.lj_dict = ParameterDict()
         self.charge_dict = ParameterDict()
@@ -55,15 +107,29 @@ class ParameterSystem:
         self.mol_dict = dict()
 
     def add_system_from_fasta(self, fasta):
+        """
+        When working with fasta files, this function does the bulk of
+        the work for converting that fasta file to an OEMol and
+        then making an OpenMM system and identifying parameters by atom.
+
+        For all tests in this manuscript we started with the file
+        mol_files/everything.fasta
+        """
         base = os.path.abspath(fasta).split('.')[0]
         mol_id = base.split('/')[-1]
 
         oemol = oechem.OEMol()
         ifs = oechem.oemolistream(fasta)
 
+        # After a lot of working on a single example
+        # this seems to be the right combination
+        # of calls to get an oemol from a fasta into the form
+        # where all bonds are fully perceived with order, etc.
+        # and that allows oeommtools to convert
+        # the molecule into an OpenMM system.
+        # I don't have justification for most of the steps.
         oechem.OEReadFASTAFile(ifs, oemol)
         oechem.OEAddExplicitHydrogens(oemol)
-
         oechem.OEPerceiveResidues(oemol)
         oechem.OEPDBOrderAtoms(oemol)
 
@@ -77,16 +143,25 @@ class ParameterSystem:
         m = oechem.OEMol()
         oechem.OEReadPDBFile(ifs, m)
         m.SetTitle(mol_id)
+
+        # convert oemol to OpenMM topology
         top = oeo_utils.oemol_to_openmmTop(m)[0]
         ff = app.ForceField(self.openmm_xml)
         protein_sys = ff.createSystem(top)
 
         oechem.OEAssignFormalCharges(m)
         oechem.OEClearAromaticFlags(m)
+        # IMPORTANT!!!!
+        # use MDL aromaticity model to be consistent with SMIRNOFF
         oechem.OEAssignAromaticFlags(m, oechem.OEAroModel_MDL)
         oechem.OEAssignHybridization(m)
 
         # save residue names in parm system
+        # We had issues with charges because they are different
+        # depending where they are in the residue chain, terminal
+        # residues have different charges than those in the
+        # main chain. More work is still require to figure out how
+        # properly handle charges
         parm = parmed.openmm.load_topology(top, protein_sys)
         for res in parm.residues:
             rt = ResidueTemplate.from_residue(res)
@@ -111,19 +186,11 @@ class ParameterSystem:
 
     def add_nonbonds(self, sys, mol_id):
         """
-        Cluster atoms based on their partial charge
-
+        Updates LJ and charge dictionaries for this system.
         Parameters
         ----------
-        sys: list like of parmed system
-        charge_dict: dictionary to store data that will be updated in this function
-        lj_dict: dictionary to store LJ parameters for this molecule
+        sys: parmed system
         mol_id: key for this system to store data in the dictionaries
-
-        Returns
-        -------
-        clusters: dictionary with the form
-                  {string parameter: {'atom_indices': {}}
         """
         # TODO raise error if mol_id not in mol_dict
         for a in sys.atoms:
@@ -147,6 +214,13 @@ class ParameterSystem:
             self.lj_dict.add_atoms(lj_str, mol_id, [a.idx])
 
     def add_bonds(self, sys, mol_id):
+        """
+        Updates the bond parameter dictionary for the input system.
+        Parameters
+        ----------
+        sys: parmed system
+        mol_id: key for this system to store data in the dictionaries
+        """
         # TODO raise error if mol_id not in mol_dict
         for b in sys.bonds:
             bond_str = "%.3f\t%.3f" % (b.type.k, b.type.req)
@@ -155,6 +229,13 @@ class ParameterSystem:
             self.bond_dict.add_atoms(bond_str, mol_id, [b.atom1.idx, b.atom2.idx])
 
     def add_angles(self, sys, mol_id):
+        """
+        Updates the angle parameter dictionary for the input system.
+        Parameters
+        ----------
+        sys: parmed system
+        mol_id: key for this system to store data in the dictionaries
+        """
         # TODO raise error if mol_id not in mol_dict
         for an in sys.angles:
             angle_str = "%.3f\t%.3f" % (an.type.k, an.type.theteq)
@@ -164,14 +245,21 @@ class ParameterSystem:
 
     def convert_for_smirksifying(self, param_type=None):
         """
-        param_type: string specifying the parameter you want clusters for
-        must chose from ['lj', 'charge', 'proper_torsion', 'improper_torsion', 'angle', 'bond']
+
+        Parameters
+        ----------
+        param_type: string specifying the parameter you want clusters
+                    must chose from ['lj', 'charge', 'proper_torsion',
+                    'improper_torsion', 'angle', 'bond']
+                    If parameter type is None, a dictionary with all
+                    clusters is returned instead
 
         Returns
         -------
-        - list of molecules
-        - either dictionary or list of clustered atomic indices
-
+        mols: list of OEMols
+        clusters: if param_types is None: dictionary if a list of
+                  clusters for each parameter type. Otherwise,
+                  the list of clusters for the specified parameter type
         """
         idx_list = list()
         mol_list = list()
@@ -212,9 +300,18 @@ class ParameterSystem:
         return mol_list, cluster_types[param_type.lower()]
 
     def add_torsions(self, sys, mol_id):
+        """
+        Updates the proper_torsion and improper_torsion
+        parameter dictionaries for the input system.
+        Parameters
+        ----------
+        sys: parmed system
+        mol_id: key for this system to store data in the dictionaries
+        """
         # TODO raise error if mol_id not in mol_dict
         temp_dict = dict()
         for d in sys.dihedrals:
+            # Check for Improper
             if d.improper:
                 imp_str = "%.3f\t%.3f\t%.3f\t%i" % (d.type.phi_k, d.type.phase, d.type.per, d.atom3.atomic_number)
                 imp_params = [d.type.uphi_k, d.type.uphase, unit.Quantity(d.type.per)]
@@ -224,13 +321,15 @@ class ParameterSystem:
                 sides = sorted([d.atom1.idx, d.atom2.idx, d.atom4.idx])
                 atom_indices = [sides[0], d.atom3.idx, sides[1], sides[2]]
                 self.improper_dict.add_atoms(imp_str, mol_id, atom_indices)
-            else:
+            else: # proper torsion
                 atoms = tuple([d.atom1.idx, d.atom2.idx, d.atom3.idx, d.atom4.idx])
                 params = (d.type.uphi_k, d.type.uphase, unit.Quantity(d.type.per))
                 if atoms not in temp_dict:
                     temp_dict[atoms] = list()
                 temp_dict[atoms].append(params)
 
+        # combine parameters with multiple periodicities for the
+        # same four atoms so those are treated as one parameter
         for atoms, param_list in temp_dict.items():
             new_params = [p for t in param_list for p in t]
             prop_str = '\t'.join(['%.3f' % p._value for p in new_params])
@@ -238,9 +337,13 @@ class ParameterSystem:
             self.proper_dict.add_atoms(prop_str, mol_id, atoms)
 
 
+# ==================================================
+# Ordering functions
+# below are a series of functions that take a list of cluster
+# and reorder them
+
 def reverse_clusters(clusters):
     return list(reversed(clusters))
-
 
 def shuffle(clusters):
     temp_c = copy.deepcopy(clusters)
@@ -249,6 +352,7 @@ def shuffle(clusters):
 
 
 def by_smallest_size(clusters):
+    # smallest cluster by number of atom_indice groups in it
     return sorted(clusters, key=lambda x: len([a for l in x[1] for a in l]))
 
 
@@ -275,6 +379,10 @@ def by_biggest_smirks(clusters, mols):
 
 
 def by_terminii(clusters, mols, sort_funct=by_biggest_size):
+    """
+    This is used for charge clusters to put special case termini
+    clusters at the end of the list
+    """
     x = [t for t in clusters if 'X' in t[0]]
     n = [t for t in clusters if 'N' in t[0]]
     c = [t for t in clusters if 'C' in t[0]]
@@ -286,10 +394,30 @@ def by_terminii(clusters, mols, sort_funct=by_biggest_size):
     return sort_funct(x) + sort_funct(n) + sort_funct(c)
 
 
-def change_order_smirksified(mols, cluster_types, order_type_names=None, smirks_verbose=False,
-                             include_params=None):
+def change_order_smirksified(mols, cluster_types, order_type_names=None, smirks_verbose=False, include_params=None):
     """
-    Returns smirs_order_types object
+    Creates SMIRKSifier objects for all specified order types.
+
+    Parameters
+    ----------
+    mols: list of oemols
+    cluster_types: dictionary in the form {fragment: clusters}
+    order_type_names: list of types of cluster ordering
+                      techniques to try, if None all will be used
+    smirks_verbose: verbosity input for SMIRKSifier
+    include_params: which fragment types (bond, angle, etc) to include
+                    if None, all fragments in cluster_types will be used
+
+    Returns
+    -------
+    smirksifier_order_types: This is a dictionary storing ChemPer
+                             SMIRKSifier objects for each order
+                             and fragment type used, it has the form:
+                             { order type:
+                                   fragment: SMIRKSifier}
+                            Note - these included FAILED SMIRKSifier
+                            objects so it is important to check if the
+                            SMIRKSifier was successful.
     """
     smirs_order_types = dict()
 
@@ -346,6 +474,9 @@ def change_order_smirksified(mols, cluster_types, order_type_names=None, smirks_
 
 
 def print_order_type_data(smirks_order_types, print_all=True):
+    """
+    Slightly complicated function that makes printing output easer to read
+    """
     for o_type, order_smirks in smirks_order_types.items():
         final_print = ''
         all_passed = True
@@ -369,6 +500,11 @@ def print_order_type_data(smirks_order_types, print_all=True):
 
 
 def at_least_one_passed(smirks_order_types):
+    """
+    This takes the output from change_order_smirksified and
+    then checks all of the SMIRKSifiers to see if at least ONE
+    passed!
+    """
     passed = True
     for o_type, order_smirks in smirks_order_types.items():
         passed = True
@@ -381,7 +517,7 @@ def at_least_one_passed(smirks_order_types):
 
 
 def everything_from_fastas(list_fastas,
-                           protein_xml='amber14-all.xml',
+                           protein_xlm='amber99sbildn.xml',
                            order_type_names=None,
                            verbose=True,
                            include_params=None):
@@ -433,6 +569,23 @@ def everything_from_fastas(list_fastas,
 
 
 def clusters_to_files(mols, clusters, smirs_order_types, json_file_name, mol_dir='./mol_files/'):
+    """
+    This converts the output from change_order_smirksified and
+    saves the created SMIRKS patterns and molecules to output files.
+
+    Specifically the molecules are stored into oeb files which
+    are saved into the speficied directory. The clusters and
+    created SMIRKS patterns are saved into a json file so they can be
+    extracted and reused
+
+    Parameters
+    ----------
+    mols: list of OEMols
+    clusters: cluster dictionary in the form {fragment: cluster list}
+    smirs_order_types: SMIRKSifier dictionary from change_order_smirksified
+    json_file_name: str, name of json file to save data
+    mol_dir: directory to save output files
+    """
     directory = os.path.abspath(mol_dir)
 
     mfile_names = list()
@@ -475,6 +628,10 @@ def clusters_to_files(mols, clusters, smirs_order_types, json_file_name, mol_dir
 
 
 def mol_to_idx_smi(m):
+    """
+    make a molecule with atom map indices with the atoms
+    current indices
+    """
     for a in m.GetAtoms():
         a.SetMapIdx(a.GetIdx() + 1)
     return oechem.OEMolToSmiles(m)
@@ -490,7 +647,7 @@ if __name__ == '__main__':
 
     parser.add_option('-f', '--fastas',
                       action='store', type='string', dest='fastas',
-                      default='*triple*.fasta',
+                      default='everything.fasta',
                       help="This is a search for fasta files in the provided directory")
 
     parser.add_option('-d', '--directory',
@@ -528,17 +685,6 @@ if __name__ == '__main__':
     directory = os.path.abspath(opt.directory)
     fastas = glob.glob(os.path.join(directory, opt.fastas))
     fastas = [f for f in fastas if '.fasta' in f]
-
-    #all_params = ['proper_torsion', 'bond', 'lj', 'charge']
-# 'original': None,
-# 'reversed': reverse_clusters,
-# 'shuffle': shuffle,
-# 'small_size': by_smallest_size,
-# 'biggest_size': by_biggest_size,
-# 'fewest_mols': by_smallest_num_molecule,
-# 'most_mols': by_biggest_num_molecule,
-# 'small_smirks': by_smallest_smirks,
-# 'big_smirks': by_biggest_smirks}
 
     all_params = ['charge', 'angle', 'improper_torsion', 'proper_torsion', 'lj', 'bond']
     names_sets = [('big', ['biggest_size', 'most_mols', 'big_smirks'] ),

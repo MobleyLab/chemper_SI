@@ -1,0 +1,385 @@
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{>{\baselineskip=10pt}p{.07\textwidth} >{\baselineskip=10pt}p{.45\textwidth} >{\baselineskip=10pt}p{.4\textwidth}} 
+\multicolumn{3}{c}{Bond parameters in AlkEthOH} \\ 
+\hline 
+\textbf{Label} & \textbf{Original} & \textbf{Reductions} \\ 
+\hline 
+\endhead\textbf{s0} & \texttt{[\#6X4:1]-[\#6X4:2]} & \texttt{[*:1]$\sim$[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]} \\ 
+\hline 
+\textbf{s13} & \texttt{[\#6:1]-[\#8:2]} & \texttt{[*:1]$\sim$;!@[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]} \\ 
+\hline 
+\textbf{s14} & \texttt{[\#6X4:1]-[\#8X2H0:2]} & \texttt{[*:1]$\sim$[\#8r4,\#8r5,\#8r6,\#8r7,\#8r8,\#8r9:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H0:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;X2;x2:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H0:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H0:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8r4,\#8r5,\#8r6,\#8r7,\#8r8,\#8r9:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*;X2:2]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]} \\ 
+\hline 
+\textbf{s82} & \texttt{[\#6X4:1]-[\#1:2]} & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1:2]} \\ 
+\hline 
+\textbf{s86} & \texttt{[\#8:1]-[\#1:2]} & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[\#1:2]} \\ 
+\hline 
+\caption{This table shows the \texttt{SMIRKS} patterns for Bond parameters from smirnoff99Frosst (original). Then we show results from ten different runs of \texttt{Reducer}. The stochastic decorator removal leads to different \texttt{SMIRKS} patterns for each reduction.}
+\label{tab:bond_alkethoh}
+\end{longtable}
+
+
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{>{\baselineskip=10pt}p{.07\textwidth} >{\baselineskip=10pt}p{.45\textwidth} >{\baselineskip=10pt}p{.4\textwidth}} 
+\multicolumn{3}{c}{Angle parameters in AlkEthOH} \\ 
+\hline 
+\textbf{Label} & \textbf{Original} & \textbf{Reductions} \\ 
+\hline 
+\endhead\textbf{s0} & \texttt{[*:1]$\sim$[\#6X4:2]-[*:3]} & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]} \\ 
+\hline 
+\textbf{s1} & \texttt{[\#1:1]-[\#6X4:2]-[\#1:3]} & \texttt{[*:1]$\sim$;!@[*;H2:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[\#1:1]$\sim$[*:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[\#1:1]$\sim$[*:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*;H2:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*;H2:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*;H2:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*;H2:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*;H2:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*;H2:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[\#1:1]$\sim$[*:2]$\sim$[\#1:3]} \\ 
+\hline 
+\textbf{s6} & \texttt{[\#6r4:1]-;@[\#6r4:2]-;@[\#6r4:3]} & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*;r4;X4:3]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*;r4:2]$\sim$[\#6:3]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[\#6;r4:3]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*;r4:2]$\sim$[\#6:3]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[\#6;r4:3]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*;r4:2]$\sim$[\#6:3]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*;r4:2]$\sim$[\#6:3]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[\#6;r4:3]} \\ 
+ &  & \texttt{[*;r4;X4:1]$\sim$[*:2]$\sim$[\#6:3]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*;r4:2]$\sim$[\#6:3]} \\ 
+\hline 
+\textbf{s7} & \texttt{[!\#1:1]-[\#6r4:2]-;!@[!\#1:3]} & \texttt{[*:1]$\sim$[\#6r4:2]$\sim$[\#8!r:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#6H1r4:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*;r4:1]$\sim$[*:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*;r4:1]$\sim$[*:2]$\sim$[\#8H1:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#6r4:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*;r4:1]$\sim$[*:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#6H1r4:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*;x2:1]$\sim$[\#6r4:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#6r4:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*;r4:1]$\sim$[*:2]$\sim$[\#8!r:3]} \\ 
+\hline 
+\textbf{s8} & \texttt{[!\#1:1]-[\#6r4:2]-;!@[\#1:3]} & \texttt{[\#6,\#8:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[*X4,*X2:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[*H1,*r4:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[\#6,\#8:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[*X4,*X2:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[*X4,*X2:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[\#6,\#8:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[\#6,\#8:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[\#6,\#8:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+ &  & \texttt{[\#6,\#8:1]$\sim$[*;r4:2]$\sim$[\#1:3]} \\ 
+\hline 
+\textbf{s13} & \texttt{[*:1]$\sim$;!@[*;r5:2]$\sim$;@[*;r5:3]} & \texttt{[*:1]$\sim$;@[*;r5:2]$\sim$[*;!r:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*;r5:2]$\sim$[*;x0:3]} \\ 
+ &  & \texttt{[\#6,\#8H0:1]$\sim$[*;r5:2]$\sim$[*X1,*X2H1:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*;r5:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[\#6,\#8H0:1]$\sim$[*;r5:2]$\sim$[*;!r:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*;r5:2]$\sim$[*;x0:3]} \\ 
+ &  & \texttt{[*;r5:1]$\sim$[*:2]$\sim$;!@[*,*:3]} \\ 
+ &  & \texttt{[*;r5:1]$\sim$[*:2]$\sim$;!@[*:3]} \\ 
+ &  & \texttt{[*;r5:1]$\sim$[*:2]$\sim$[*;x0:3]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*;r5:2]$\sim$;!@[*:3]} \\ 
+\hline 
+\textbf{s26} & \texttt{[*:1]-[\#8:2]-[*:3]} & \texttt{[*:1]$\sim$[*;X2:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$[*:3]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$[*:3]} \\ 
+\hline 
+\caption{This table shows the \texttt{SMIRKS} patterns for Angle parameters from smirnoff99Frosst (original). Then we show results from ten different runs of \texttt{Reducer}. The stochastic decorator removal leads to different \texttt{SMIRKS} patterns for each reduction.}
+\label{tab:angle_alkethoh}
+\end{longtable}
+
+
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{>{\baselineskip=10pt}p{.07\textwidth} >{\baselineskip=10pt}p{.45\textwidth} >{\baselineskip=10pt}p{.4\textwidth}} 
+\multicolumn{3}{c}{Proper Torsion parameters in AlkEthOH} \\ 
+\hline 
+\textbf{Label} & \textbf{Original} & \textbf{Reductions} \\ 
+\hline 
+\endhead\textbf{s0} & \texttt{[*:1]-[\#6X4:2]-[\#6X4:3]-[*:4]} & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+\hline 
+\textbf{s1} & \texttt{[\#6X4:1]-[\#6X4:2]-[\#6X4:3]-[\#6X4:4]} & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*;X4:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*;X4:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#6:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#6:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*;X4:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#6:4]} \\ 
+ &  & \texttt{[*;X4:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#6:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#6:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#6:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*;X4:4]} \\ 
+\hline 
+\textbf{s2} & \texttt{[\#1:1]-[\#6X4:2]-[\#6X4:3]-[\#1:4]} & \texttt{[*:1]$\sim$;!@[*:2]$\sim$[*:3]$\sim$;!@[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*:2]$\sim$[*:3]$\sim$;!@[*:4]} \\ 
+ &  & \texttt{[\#1:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#1:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*:2]$\sim$[*:3]$\sim$;!@[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*:2]$\sim$[*:3]$\sim$;!@[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+\hline 
+\textbf{s3} & \texttt{[\#1:1]-[\#6X4:2]-[\#6X4:3]-[\#6X4:4]} & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+\hline 
+\textbf{s4} & \texttt{[\#8X2:1]-[\#6X4:2]-[\#6X4:3]-[\#8X2:4]} & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[*;X2:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*;X2:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*;X2:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*;X2:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[*;X2:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*;X2:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[*;X2:1]$\sim$[*:2]$\sim$[*:3]$\sim$[*;X2:4]} \\ 
+\hline 
+\textbf{s8} & \texttt{[\#1:1]-[\#6X4:2]-[\#6X4:3]-[\#8X2:4]} & \texttt{[*;X2:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*;X2:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[*;X2:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+ &  & \texttt{[\#8:1]$\sim$[*:2]$\sim$[*:3]$\sim$[\#1:4]} \\ 
+\hline 
+\textbf{s83} & \texttt{[*:1]-[\#6X4:2]-[\#8X2:3]-[\#1:4]} & \texttt{[*:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+\hline 
+\textbf{s84} & \texttt{[\#6X4:1]-[\#6X4:2]-[\#8X2H1:3]-[\#1:4]} & \texttt{[\#6:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*;X4:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*;X4:1]$\sim$[*:2]$\sim$;!@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$[\#8:3]$\sim$[*:4]} \\ 
+\hline 
+\textbf{s85} & \texttt{[*:1]-[\#6X4:2]-[\#8X2H0:3]-[*:4]} & \texttt{[*:1]$\sim$[\#8:2]$\sim$;@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$;@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$;@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H0:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$;@[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H0:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]$\sim$[*:3]$\sim$[*:4]} \\ 
+\hline 
+\textbf{s86} & \texttt{[\#6X4:1]-[\#6X4:2]-[\#8X2H0:3]-[\#6X4:4]} & \texttt{[*:1]$\sim$;@[*:2]$\sim$;@[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*;H0:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[\#8:3]$\sim$;@[*:4]} \\ 
+ &  & \texttt{[\#6:1]$\sim$[*:2]$\sim$;@[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*;X2;x2:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$;@[\#8:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*;H0:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[\#8:3]$\sim$;@[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$[*;X2;x2:3]$\sim$[*:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*:2]$\sim$;@[\#8:3]$\sim$[*:4]} \\ 
+\hline 
+\textbf{s88} & \texttt{[\#6X4:1]-[\#8X2:2]-[\#6X4:3]-[\#8X2:4]} & \texttt{[*:1]$\sim$[*;H0:2]$\sim$[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$;@[*:3]$\sim$[*;X2:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8,\#8,\#8:2]$\sim$;@[*:3]$\sim$[\#8,\#8:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[*;X2:2]$\sim$[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]$\sim$[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]$\sim$[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$;@[*:3]$\sim$[\#8:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$;@[*:3]$\sim$[*;X2:4]} \\ 
+ &  & \texttt{[*:1]$\sim$;@[\#8:2]$\sim$[*:3]$\sim$[*;X2:4]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8:2]$\sim$;@[*:3]$\sim$[\#8:4]} \\ 
+\hline 
+\caption{This table shows the \texttt{SMIRKS} patterns for Proper Torsion parameters from smirnoff99Frosst (original). Then we show results from ten different runs of \texttt{Reducer}. The stochastic decorator removal leads to different \texttt{SMIRKS} patterns for each reduction.}
+\label{tab:proper_alkethoh}
+\end{longtable}
+
+
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{>{\baselineskip=10pt}p{.07\textwidth} >{\baselineskip=10pt}p{.45\textwidth} >{\baselineskip=10pt}p{.4\textwidth}} 
+\multicolumn{3}{c}{Nonbond parameters in AlkEthOH} \\ 
+\hline 
+\textbf{Label} & \textbf{Original} & \textbf{Reductions} \\ 
+\hline 
+\endhead\textbf{s1} & \texttt{[\#1:1]-[\#6X4]} & \texttt{[*:1]} \\ 
+ &  & \texttt{[*:1]} \\ 
+ &  & \texttt{[*:1]} \\ 
+ &  & \texttt{[*:1]} \\ 
+ &  & \texttt{[*:1]} \\ 
+ &  & \texttt{[*:1]} \\ 
+ &  & \texttt{[*:1]} \\ 
+ &  & \texttt{[*:1]} \\ 
+ &  & \texttt{[*:1]} \\ 
+ &  & \texttt{[*:1]} \\ 
+\hline 
+\textbf{s2} & \texttt{[\#1:1]-[\#6X4]-[\#7,\#8,\#9,\#16,\#17,\#35]} & \texttt{[*:1]$\sim$[*]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$[*;X2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$[*;X2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$[\#8]} \\ 
+\hline 
+\textbf{s3} & \texttt{[\#1:1]-[\#6X4](-[\#7,\#8,\#9,\#16,\#17,\#35])-[\#7,\#8,\#9,\#16,\#17,\#35]} & \texttt{[*:1]$\sim$[*]($\sim$[\#8])$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])$\sim$[*;X2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[*;X2])$\sim$[*;X2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])$\sim$[*;X2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[*;H0;x2])$\sim$[*;X2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])$\sim$[\#8]} \\ 
+\hline 
+\textbf{s4} & \texttt{[\#1:1]-[\#6X4](-[\#7,\#8,\#9,\#16,\#17,\#35])(-[\#7,\#8,\#9,\#16,\#17,\#35])-[\#7,\#8,\#9,\#16,\#17,\#35]} & \texttt{[*:1]$\sim$[*]($\sim$[\#8])($\sim$[\#8])$\sim$[*;X2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H1]($\sim$;@[\#8])$\sim$[\#8r5,\#8r7,\#8r9]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H1]($\sim$;@[\#8])$\sim$[\#8r5,\#8r7,\#8r9]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H1]($\sim$;@[\#8])$\sim$;@[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])($\sim$[\#8])$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])($\sim$[\#8])$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H1]($\sim$;@[\#8])$\sim$[*;H0]} \\ 
+ &  & \texttt{[*:1]$\sim$[*;H1]($\sim$;@[\#8])$\sim$;@[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])($\sim$[\#8])$\sim$[*;X2]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]($\sim$[\#8])($\sim$[\#8])$\sim$[*;X2]} \\ 
+\hline 
+\textbf{s11} & \texttt{[\#1:1]-[\#8]} & \texttt{[*:1]$\sim$[*]$\sim$;!@[\#6]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$;!@[\#6]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$;!@[\#6]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[*]$\sim$;!@[\#6]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#8]} \\ 
+\hline 
+\textbf{s15} & \texttt{[\#6X4:1]} & \texttt{[*:1]$\sim$[\#1]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1]} \\ 
+ &  & \texttt{[\#6:1]} \\ 
+ &  & \texttt{[\#6:1]} \\ 
+ &  & \texttt{[*:1]($\sim$[*])$\sim$[*]} \\ 
+ &  & \texttt{[*:1]($\sim$[*])$\sim$[*]} \\ 
+ &  & \texttt{[*;x2:1]} \\ 
+ &  & \texttt{[*:1]$\sim$[\#1]} \\ 
+ &  & \texttt{[\#6:1]} \\ 
+ &  & \texttt{[\#6:1]} \\ 
+\hline 
+\textbf{s17} & \texttt{[\#8X2H0+0:1]} & \texttt{[*;H0;x2:1]} \\ 
+ &  & \texttt{[\#8:1]} \\ 
+ &  & \texttt{[\#8:1]} \\ 
+ &  & \texttt{[*;H0;x2:1]} \\ 
+ &  & \texttt{[\#8:1]} \\ 
+ &  & \texttt{[*;X2:1]} \\ 
+ &  & \texttt{[\#8:1]} \\ 
+ &  & \texttt{[*;H0;x2:1]} \\ 
+ &  & \texttt{[*;X2:1]} \\ 
+ &  & \texttt{[\#8:1]} \\ 
+\hline 
+\textbf{s18} & \texttt{[\#8X2H1+0:1]} & \texttt{[\#8:1]$\sim$;!@[*]} \\ 
+ &  & \texttt{[\#8x0:1]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*;H1;x2]$\sim$[\#1]} \\ 
+ &  & \texttt{[\#8:1]$\sim$;!@[*]} \\ 
+ &  & \texttt{[*:1]($\sim$;!@[\#6])$\sim$[*]} \\ 
+ &  & \texttt{[\#8H1:1]} \\ 
+ &  & \texttt{[*:1]$\sim$;!@[*;H1;x2]$\sim$[\#1]} \\ 
+ &  & \texttt{[\#8H1:1]} \\ 
+ &  & \texttt{[\#8!r:1]} \\ 
+ &  & \texttt{[*:1]($\sim$;!@[\#6])$\sim$[*]} \\ 
+\hline 
+\caption{This table shows the \texttt{SMIRKS} patterns for Nonbond parameters from smirnoff99Frosst (original). Then we show results from ten different runs of \texttt{Reducer}. The stochastic decorator removal leads to different \texttt{SMIRKS} patterns for each reduction.}
+\label{tab:nonbond_alkethoh}
+\end{longtable}
+
+
